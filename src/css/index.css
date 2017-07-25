@@ -1,0 +1,80 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	font-family: Arial, "微软雅黑";
+	font-size: 16px;
+}
+#canvas {
+	background: rgba(0, 0, 0, 0.18);
+	position: absolute;
+	margin-top: 5px;
+	clear: both;
+}
+#tab {
+	background: rgba(0, 0, 0, 0.18);
+	color: black;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+	width: 801px;
+}
+#tab span{
+	padding: 2px;
+	
+}
+#tools {
+	width: 801px;
+	margin-top: 2px;
+}
+#tools #clearFloat{
+	clear: both;
+}
+#tools div {
+	width: 157px;
+	height: 100px;
+	border: 1px solid black;
+	margin: 0 2px;
+	float: left;
+}
+#tools #copy {
+	margin-left: 0px;
+}
+#tools #stroke {
+	margin-right: 0px;
+}
+#tools #choose #choice {
+    width: 30%;
+    height: 100%;
+}
+#tools #choose #choice #selected {
+    height: 50px;
+    padding: 5px 0;
+    margin: 5px 0;
+}
+#tools #choose #choice #opt{
+    border: 2px solid #fff;
+    background: #6e649a;
+    color: #fff;
+    font-weight: bold;
+}
+#tools #choose #slice {
+    width: 63%;
+    height: 50px;
+}
+#tools #choose #rotate {
+    width: 63%;
+    height: 50px;
+}
+
+#statusBar {
+    position: absolute;
+    bottom: 0px;
+}
+#statusBar #point {
+    float: right;
+    font-weight: bold;
+    height:30px;
+    width: 801px;
+}
