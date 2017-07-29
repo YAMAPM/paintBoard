@@ -34,7 +34,7 @@ body {
 #tools div {
 	width: 157px;
 	height: 100px;
-	border: 1px solid black;
+	// border: 1px solid black;
 	margin: 0 2px;
 	float: left;
 }
@@ -44,26 +44,38 @@ body {
 #tools #stroke {
 	margin-right: 0px;
 }
-#tools #choose #choice {
+#tools #choose .choice {
     width: 30%;
     height: 100%;
 }
-#tools #choose #choice #selected {
+#tools #copy .choice {
+    width: 30%;
+    height: 100%;
+}
+#tools  .choice .selected {
     height: 50px;
     padding: 5px 0;
     margin: 5px 0;
 }
-#tools #choose #choice #opt{
-    border: 2px solid #fff;
+#tools .choice .opt{
+    border: 2px solid #000;
     background: #6e649a;
     color: #fff;
     font-weight: bold;
+    box-shadow: 2px 2px 1px #888888;
 }
-#tools #choose #slice {
+#tools .choice .opt.active {
+	border: 2px solid #000;
+    background: #6e649a;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: none;	
+}
+#tools .slice {
     width: 63%;
     height: 50px;
 }
-#tools #choose #rotate {
+#tools .rotate {
     width: 63%;
     height: 50px;
 }
@@ -71,6 +83,7 @@ body {
 #statusBar {
     position: absolute;
     bottom: 0px;
+    background: rgba(0, 0, 0, 0.18);
 }
 #statusBar #point {
     float: right;

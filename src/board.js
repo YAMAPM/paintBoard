@@ -1,25 +1,7 @@
 import _ from './util/util';
 function Board(pen, can, ctx) {
 	this.init(pen, can,ctx);
-    let mousedownHandler = this.mousedownHandler = function(e) {
-        let mousemoveHandler = function(e) {
-            var x1 = e.offsetX;
-            var y1 = e.offsetY;
-            ctx.lineTo(x1,y1);
-            ctx.stroke();
-        };
-        let mouseupHandler = function(e) {
-            canvas.removeEventListener('mousemove',mousemoveHandler);
-            // canvas.removeEventListener('mousedown',mousedownHandler);
-        };
-        canvas.addEventListener('mousemove',mousemoveHandler);
-        canvas.addEventListener('mouseup',mouseupHandler);
-        var d = window.devicePixelRatio;
-        var x = e.offsetX;
-        var y = e.offsetY;
-        ctx.moveTo(x,y);
-    };
-	this.initEvent(ctx, can, true, mousedownHandler);
+	this.initEvent(ctx, can);
 }
 Board.prototype = {
     init:function(pen,can,ctx) {
@@ -27,67 +9,140 @@ Board.prototype = {
         this.can = can;
         this.ctx = ctx || this.can.getContext('2d');
     },
-    initEvent:function(ctx,canvas, first, mousedownHandler) {
-        let self = this;
-        if (first) {
-            canvas.addEventListener('mousedown',mousedownHandler);
-            return;
-        } else {
-            canvas.removeEventListener('mousedown', self.mousedownHandler);
-        }
-    },
-    draw:function(type) {
-        /*let close = {};
-        let self = this;
+    initEvent:function(ctx,canvas) {
+        var self = this;
+        let close = {};
         let surfaceImgData = null;
-        let startHandler = function(e) {
+        let mousedownHandler = function (e) {
+            self.drawing = true;    
+            console.log('mousedown', self.drawing, self.pen.type);
             let x1 = e.offsetX;
             let y1 = e.offsetY;
-            surfaceImgData = self.ctx.getImageData(0, 0, self.can.width, self.can.height);
-            self.ctx.beginPath();
-            self.ctx.moveTo(x1, y1);
             close.x1 = x1;
             close.y1 = y1;
-            self.can.addEventListener('mousemove', moveHandler)
+            surfaceImgData = self.ctx.getImageData(0, 0, self.can.width, self.can.height);
+            
+            
         };
-        let moveHandler = function(e) {
-            let x2 = e.offsetX;
-            let y2 = e.offsetY;
-            close.x2 = x2;
-            close.y2 = y2;
-            // self.ctx.clearRect(0, 0, self.can.width, self.can.height);
-            self.ctx.putImageData(surfaceImgData, 0, 0);
-            self.ctx.beginPath();
-            self.ctx.moveTo(close.x1, close.y1);
-            self.ctx.lineTo(x2, y2);
-            self.ctx.stroke();
-            console.log(x2, y2);
+        let mousemoveHandler = function (e) {
+            console.log(self.drawing, self.pen.type);
+            if (self.drawing) {
+                switch (self.pen.type) {
+                    case 'line':
+                        if (self.drawing) {
+                            let x2 = e.offsetX;
+                            let y2 = e.offsetY;
+                            close.x2 = x2;
+                            close.y2 = y2;
+                            self.ctx.putImageData(surfaceImgData, 0, 0);
+                            self.ctx.beginPath();
+                            self.ctx.moveTo(close.x1, close.y1);
+                            self.ctx.lineTo(x2, y2);
+                            self.ctx.stroke();
+                        }
+                        break;
+                    case 'rect':
+                        if (self.drawing) {
+                            /*let edit = document.querySelector('#choose .choice .opt').getAttribute('edit');
+                            if (edit == '1') {
+                                if (self.ctx.isPointInPath(e.offsetX, e.offsetY)) {
+                                    console.log('asdf');
+                                    self.ctx.restore();
+                                    self.ctx.clearRect(0, 0, self.can.width, self.can.height);
+                                    // self.ctx.putImageData(surfaceImgData, 0, 0);
+                                    self.ctx.rect(close.x1, close.y1, Math.abs(close.x1 - close.x2), Math.abs(close.y1 - close.y2));
+                                    self.ctx.stroke();
+                                    return;
+                                }
+                            }*/
+                            let x2 = e.offsetX;
+                            let y2 = e.offsetY;
+                            close.x2 = x2;
+                            close.y2 = y2;
+                            self.ctx.putImageData(surfaceImgData, 0, 0);
+                            self.ctx.save();
+                            surfaceImgData = self.ctx.getImageData(0, 0, self.can.width, self.can.height);
+                            ctx.beginPath();
+                            self.ctx.rect(close.x1, close.y1, Math.abs(close.x1 - close.x2), Math.abs(close.y1 - close.y2));
+                            self.ctx.stroke();
+                            ctx.closePath();
+                        }
+                        break;
+                    case 'polyline':
+                        if (self.drawing) {
+                            let x2 = e.offsetX;
+                            let y2 = e.offsetY;
+                            close.x2 = x2;
+                            close.y2 = y2;
+                            self.ctx.putImageData(surfaceImgData, 0, 0);
+                            self.ctx.beginPath();
+                            self.ctx.moveTo(close.x1, close.y1);
+                            self.ctx.lineTo(x2, y2);
+                            self.ctx.stroke(); 
+                        }
+                        break;
+                    case 'polygon':
+                        if (self.drawing) {
+
+                        }
+                        break;
+                    case 'eraser':
+                        if (self.drawing) {
+                            self.ctx.beginPath();
+                            self.ctx.fillStyle = 'white';
+                            self.ctx.strokeStyle = 'white';
+                            self.ctx.rect(e.offsetX - 5, e.offsetY - 5, 10, 10);
+                            self.ctx.stroke();
+                            if (self.ctx.isPointInPath(e.offsetX - 5, e.offsetY - 5)) {
+                                self.ctx.rect(e.offsetX - 5, e.offsetY - 5, 10, 10);
+                                self.ctx.fillStyle = 'white';
+                                self.ctx.stroke();
+                            }  
+                        }
+                        
+                }
+            }
+            
+            
         };
-        let finishHandler = function(e) {
-            let x3 = e.offsetX;
-            let y3 = e.offsetY;
-            close.x3 = x3;
-            close.y3 = y3;
-            self.can.removeEventListener('mousemove', moveHandler);
-        };*/
+        let mouseupHandler = function (e) {
+            if (self.pen.type != 'polyline') {
+                self.drawing = false;
+            } else {
+
+            }
+            console.log('mouseup', self.drawing);
+        }
+        let mousedbHandler = function (e) {
+            self.drawing = false;
+            console.log('mousedbHandler', self.drawing);
+        }
+        canvas.addEventListener('mousedown', mousedownHandler);
+        canvas.addEventListener('mousemove', mousemoveHandler);
+        canvas.addEventListener('mouseup', mouseupHandler);
+
+        // canvas.addEventListener('dbclick', mousedbHandler);
+    },
+    draw:function(type) {
+
         let self = this;
         switch (type) {
             case 'line':
-                this.initEvent(this.ctx, this.can, false);
-                this.can.addEventListener('mousedown', _.bindEvent(self.pen, self.pen.drawStart, type));
-                this.can.addEventListener('mouseup', _.bindEvent(self.pen, self.pen.drawEnd, type));
+                this.pen.type = 'line';
                 break;
             case 'rect':
-                this.initEvent(this.ctx, this.can, false);
-                this.can.addEventListener('mousedown', _.bindEvent(self.pen, self.pen.drawStart, type) );
-                this.can.addEventListener('mouseup', _.bindEvent(self.pen, self.pen.drawEnd, type));
+                this.pen.type = 'rect';
                 break;
             case 'circle':
-                this.can.addEventListener('mousedown', self.pen.drawStart);
-                this.can.addEventListener('mouseup', self.pen.drawEnd);
+                this.pen.type = 'circle';
+                break;
+            case 'polyline':
+                this.pen.type = 'polyline';
+                break;
+            case 'polygon':
+                this.pen.type = 'polygon';
                 break;
             default:
-                this.initEvent();
         }
 	},
     openPic: function(data) {
@@ -97,9 +152,19 @@ Board.prototype = {
         img.style.display = 'none';
         document.body.appendChild(img);
         img.onload = function () {
-            self.ctx.drawImage(img, 0, 0);
+            self.ctx.drawImage(img, 0, 0, self.can.width, self.can.height);
             document.body.removeChild(document.querySelector('img'));
         }
+    },
+    slicePic: function(x, y) {
+        this.ctx.save();
+        this.ctx.strokeStyle = 'black';
+        this.draw('rect');
+        this.ctx.restore(); 
+    },
+    eraser: function (x, y) {
+        console.log('eraser');
+        this.pen.type = 'eraser';
     }
 };
 module.exports = Board;

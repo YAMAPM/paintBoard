@@ -5,6 +5,7 @@ import Pen from '../src/pen'
 import Tools from '../src/tools';
 import Tab from '../src/tab';
 import config from '../src/config'
+import Stroke from '../src/tool/stroke'
 
 let canvas = document.querySelector('#canvas');
 let ctx = canvas.getContext('2d');
@@ -14,3 +15,4 @@ let pen = new Pen(ctx);
 let board = new Board(pen, canvas, ctx);
 let tools = new Tools(document.querySelector('#tools'), board, canvas, ctx);
 let tab = new Tab(document.querySelector('#tab'), board, ctx);
+let stroke  = new Stroke(document.querySelector('#tools .eraser'), board);

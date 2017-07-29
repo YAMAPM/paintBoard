@@ -8,5 +8,5 @@ exports.window2Canvas = function (can, x, y) {
 exports.bindEvent = function (el, fn, data) {
     return function(e) {
         fn.apply(el, [e, data]);
-    }
+    };
 };

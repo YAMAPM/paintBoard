@@ -6,34 +6,45 @@
 <body>
 	<div id="panel">
 		<div id="tab">
-			<span id="file" style="border-bottom: 2px solid">文件 |</span><span id="seen">查看</span>
+			<span id="file" style="cursor: pointer;">文件 |</span><span id="seen">查看</span>
             <input type="file" style="display: none;" id="open">
         </div>
 		<div id="tools">
 			<div id="copy">
-                
+                <div class="choice">
+                    <p class="selected"></p>
+                    <button class="opt">粘贴</button>
+                </div>
+                <div class="slice">复制</div>
+                <div class="rotate">剪贴</div>     
             </div>
 			<div id="choose">
-                <div id="choice">
-                    <p id="selected"></p>
-                    <button id="opt">选择</button>
+                <div class="choice">
+                    <p class="selected"></p>
+                    <button class="opt">选择</button>
                 </div>
-                <div id="slice">裁剪</div>
-                <div id="rotate">旋转</div>
+                <div class="slice">裁剪</div>
+                <div class="rotate">旋转</div>
             </div>
 			<div id="shape">
 				<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
-					<circle cx="12" cy="12" r="11" stroke="black" stroke-width="2" fill="white"/>
-                    <rect x="26"  y="2"  width="20" height="20" style="fill:#fff;stroke-width: 1;stroke: black"></rect>
-                    <line x1="50" y1="2" x2="70" y2="22" style="stroke:rgb(99,99,99);stroke-width:2"/>
-				</svg>
+					<circle cx="15" cy="15" r="12" stroke="black" stroke-width="2" fill="white"/>
+                    <rect x="34"  y="3"  width="20" height="20" style="fill:#fff;stroke-width: 1;stroke: black"></rect>
+                    <line x1="59" y1="3" x2="70" y2="22" style="stroke:rgb(99,99,99);stroke-width:2"/>
+                    <polyline points="74,3 89,3 89,15 100,15 100, 22" style="fill: white;stroke:black;stroke-width:2"/>
+                    <polygon points="130,3 110,22 150,22" style="fill: white;stroke:black;stroke-width:2 "/>
+                </svg>
 			</div>
 			<div id="color"></div>
-			<div id="stroke"></div>
+			<div id="stroke">
+                <div  class="eraser">
+                    橡皮
+                </div>
+            </div>
 			<p id="clearFloat"></p>
 		</div>
 	</div>
-	<canvas id="canvas" width="801" height="450"></canvas>
+	<canvas id="canvas" width="801" height="455" ondbclick="alert(1)"></canvas>
 	<div id="statusBar">
         <div id="point"></div>
     </div>
