@@ -6,7 +6,8 @@ function StatusBar(dom, ctx, board) {
 };
 StatusBar.prototype = {
     init: function() {
-        
-    },
+    	this.board.point = {x: 0, y: 0};	    
+    }
     
 };
+module.exports = StatusBar;

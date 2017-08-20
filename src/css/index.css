@@ -83,11 +83,14 @@ body {
 #statusBar {
     position: absolute;
     bottom: 0px;
-    background: rgba(0, 0, 0, 0.18);
+    /* background: rgba(0, 0, 0, 0.18); */
+    width: 801px;
 }
 #statusBar #point {
     float: right;
     font-weight: bold;
     height:30px;
-    width: 801px;
+    width: 30%;
+    line-height: 20px;
+    text-align: center;
 }

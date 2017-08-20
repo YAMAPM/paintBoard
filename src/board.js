@@ -1,4 +1,5 @@
 import _ from './util/util';
+
 function Board(pen, can, ctx) {
 	this.init(pen, can,ctx);
 	this.initEvent(ctx, can);
@@ -88,28 +89,55 @@ Board.prototype = {
                         break;
                     case 'eraser':
                         if (self.drawing) {
-                            self.ctx.beginPath();
+                            self.ctx.save();
+                            self.ctx.lineWidth = 2;
                             self.ctx.fillStyle = 'white';
                             self.ctx.strokeStyle = 'white';
-                            self.ctx.rect(e.offsetX - 5, e.offsetY - 5, 10, 10);
-                            self.ctx.stroke();
-                            if (self.ctx.isPointInPath(e.offsetX - 5, e.offsetY - 5)) {
-                                self.ctx.rect(e.offsetX - 5, e.offsetY - 5, 10, 10);
-                                self.ctx.fillStyle = 'white';
-                                self.ctx.stroke();
-                            }  
+                            self.ctx.beginPath();
+                            self.ctx.arc(e.offsetX, e.offsetY, 20, 0, Math.PI * 2, false);
+                            self.ctx.clip();
+                            self.ctx.fill();
+                            self.ctx.restore();
                         }
-                        
+                        break;
+                    case 'slicePic':
+                        if (self.drawing) {
+                            let x2 = e.offsetX;
+                            let y2 = e.offsetY;
+                            close.x2 = x2;
+                            close.y2 = y2;
+                            self.ctx.putImageData(surfaceImgData, 0, 0);
+                            self.ctx.save();
+                            self.ctx.strokeStyle = 'black';
+                            surfaceImgData = self.ctx.getImageData(0, 0, self.can.width, self.can.height);
+                            ctx.beginPath();
+                            self.ctx.rect(close.x1, close.y1, Math.abs(close.x1 - close.x2), Math.abs(close.y1 - close.y2));
+                            self.ctx.stroke();
+                            ctx.closePath();
+                               
+                        }
+                        break;
+
                 }
             }
+            self.point = {
+                            x: e.offsetX,
+                            y: e.offsetY
+                        };
+            document.querySelector('#statusBar #point').innerText = self.point.x + ', ' + self.point.y;
             
             
         };
         let mouseupHandler = function (e) {
             if (self.pen.type != 'polyline') {
                 self.drawing = false;
-            } else {
-
+            } 
+            if (self.pen.type == 'slicePic') {
+                let sx = close.x1;
+                let sy = close.y1;
+                let sw = Math.abs(close.x2 - close.x1);
+                let sh = Math.abs(close.y2 - close.y1)
+                self.ctx.drawImage(self.can, close.x1, close.y1, sw, sh, 0, 0, self.can.width, self.can.height);
             }
             console.log('mouseup', self.drawing);
         }
@@ -142,7 +170,9 @@ Board.prototype = {
             case 'polygon':
                 this.pen.type = 'polygon';
                 break;
-            default:
+            case 'slicePic':
+                this.pen.type = 'slicePic';
+                break;
         }
 	},
     openPic: function(data) {
@@ -159,7 +189,8 @@ Board.prototype = {
     slicePic: function(x, y) {
         this.ctx.save();
         this.ctx.strokeStyle = 'black';
-        this.draw('rect');
+        this.draw('slicePic');
+
         this.ctx.restore(); 
     },
     eraser: function (x, y) {
